@@ -37,7 +37,7 @@ router.get("/:showId/users", async (req, res) => {
 // PATCH update the available property of a show
 
 router.patch("/:showId", async (req, res) => {
-  const currentShow = await Show.findByPk(req.params.showId);
+  let currentShow = await Show.findByPk(req.params.showId);
 
   if (!currentShow) {
     res.status(404).send({ error: "Show not found." });
@@ -46,7 +46,7 @@ router.patch("/:showId", async (req, res) => {
 
   const showUpdateObject = req.body;
 
-  await currentShow.update(showUpdateObject);
+  currentShow = await currentShow.update(showUpdateObject);
 
   res.send(currentShow);
 });
