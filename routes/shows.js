@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Show } = require("../models/index");
+const { Show, User } = require("../models/index");
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 
@@ -22,8 +22,20 @@ router.get("/:showId", async (req, res) => {
 });
 
 // GET all users who watched a show
-// PUT update the available property of a show
+router.get("/:showId/users", async (req, res) => {
+  const currentShow = await Show.findByPk(req.params.showId);
+
+  if (!currentShow) {
+    res.json([]);
+    return;
+  }
+
+  const usersForThisShow = await currentShow.getUsers();
+  res.json(usersForThisShow);
+});
+
+// PATCH update the available property of a show
 // DELETE a show
-// GET shows of a particular genre (genre in req.query)
+// GET shows of a particular genre in query string (genre in req.query) - GET /shows?genre=
 
 module.exports = router;
