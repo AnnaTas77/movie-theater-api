@@ -21,9 +21,16 @@ router.get("/:userId", async (req, res) => {
 
 // GET all shows watched by a user (user id in req.params)
 
-router.get("/:id/shows", async (req, res) => {
-  const userId = req.params.id;
-  const currentUser = await User.findByPk(userId);
+router.get("/:userId/shows", async (req, res) => {
+  const currentUser = await User.findByPk(req.params.userId);
+
+  if (!currentUser) {
+    res.json([]);
+    return;
+  }
+
+  const showsForThisUser = await currentUser.getShows();
+  res.json(showsForThisUser);
 });
 
 // PUT associate a user with a show they have watched
