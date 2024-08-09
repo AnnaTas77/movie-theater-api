@@ -9,9 +9,8 @@ router.get("/", async (req, res) => {
   res.status(200).send(allUsers);
 });
 
-router.get("/:id", async (req, res) => {
-  const userId = req.params.id;
-  const currentUser = await User.findByPk(userId);
+router.get("/:userId", async (req, res) => {
+  const currentUser = await User.findByPk(req.params.userId);
 
   if (!currentUser) {
     res.status(404).send({ error: "User not found." });

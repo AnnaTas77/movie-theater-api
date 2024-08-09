@@ -11,9 +11,8 @@ router.get("/", async (req, res) => {
   res.status(200).send(allShows);
 });
 
-router.get("/:id", async (req, res) => {
-  const showId = req.params.id;
-  const currentShow = await Show.findByPk(showId);
+router.get("/:showId", async (req, res) => {
+  const currentShow = await Show.findByPk(req.params.showId);
 
   if (!currentShow) {
     res.status(404).send({ error: "Show not found." });
