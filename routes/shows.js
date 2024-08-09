@@ -5,9 +5,19 @@ const { check, validationResult } = require("express-validator");
 
 const router = Router();
 
+// GET shows of a particular genre in query string (genre in req.query) - GET /shows?genre=
 router.get("/", async (req, res) => {
-  const allShows = await Show.findAll();
+  const queryString = req.query;
 
+  if (queryString) {
+    const allShowsForThisQuery = await Show.findAll({
+      where: { genre: queryString.genre },
+    });
+    res.status(200).send(allShowsForThisQuery);
+    return;
+  }
+
+  const allShows = await Show.findAll();
   res.status(200).send(allShows);
 });
 
@@ -60,7 +70,5 @@ router.delete("/:showId", async (req, res) => {
 
   res.json(currentShow);
 });
-
-// GET shows of a particular genre in query string (genre in req.query) - GET /shows?genre=
 
 module.exports = router;
