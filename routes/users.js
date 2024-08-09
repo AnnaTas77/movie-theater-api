@@ -59,4 +59,19 @@ router.put("/:userId/shows/:showId", async (req, res) => {
   res.status(204).send();
 });
 
+// POST a new user
+
+router.post("/", [check("username").isEmail().trim()], async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.json({ error: errors.array() });
+    return;
+  }
+
+  const newUser = req.body;
+  const createdNewUser = await User.create(newUser);
+  res.status(201).json(createdNewUser);
+});
+
 module.exports = router;
