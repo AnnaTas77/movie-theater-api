@@ -61,6 +61,27 @@ router.patch("/:showId", async (req, res) => {
   res.send(currentShow);
 });
 
+// POST a show
+
+router.post(
+  "/",
+  [check("title").isLength({ min: 1, max: 25 }).trim()],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.json({ error: errors.array() });
+      return;
+    }
+
+    const newShow = req.body;
+
+    const createdNewShow = await Show.create(newShow);
+
+    res.status(201).json(createdNewShow);
+  }
+);
+
 // DELETE a show
 
 router.delete("/:showId", async (req, res) => {
