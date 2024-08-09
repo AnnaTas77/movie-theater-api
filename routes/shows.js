@@ -8,17 +8,17 @@ const router = Router();
 // GET shows of a particular genre in query string (genre in req.query) - GET /shows?genre=
 router.get("/", async (req, res) => {
   const queryString = req.query;
+  // console.log(queryString);
 
-  if (queryString) {
+  if (queryString.genre) {
     const allShowsForThisQuery = await Show.findAll({
       where: { genre: queryString.genre },
     });
     res.status(200).send(allShowsForThisQuery);
-    return;
+  } else {
+    const allShows = await Show.findAll();
+    res.status(200).send(allShows);
   }
-
-  const allShows = await Show.findAll();
-  res.status(200).send(allShows);
 });
 
 router.get("/:showId", async (req, res) => {
